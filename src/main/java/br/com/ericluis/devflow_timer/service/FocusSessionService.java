@@ -1,11 +1,13 @@
 package br.com.ericluis.devflow_timer.service;
 
 import br.com.ericluis.devflow_timer.domain.FocusSession;
+import br.com.ericluis.devflow_timer.dto.TodayStatsResponse;
 import br.com.ericluis.devflow_timer.repository.FocusSessionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class FocusSessionService {
@@ -46,4 +48,29 @@ public class FocusSessionService {
 
         return repository.save(session);
     }
+
+    public TodayStatsResponse getTodayStats() {
+        List<FocusSession> sessions = repository.findByValidTrue();
+
+        int totalMinutes = sessions.stream()
+                .mapToInt(FocusSession::getDurationMinutes)
+                .sum();
+
+        String classification;
+
+        if (totalMinutes < 60) {
+            classification = "FOCO_BAIXO";
+        } else if (totalMinutes <= 120) {
+            classification = "FOCO_MEDIO";
+        } else {
+            classification = "FOCO_ALTO";
+        }
+
+        return new TodayStatsResponse(
+                totalMinutes,
+                sessions.size(),
+                classification
+        );
+    }
+
 }
