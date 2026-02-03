@@ -59,11 +59,11 @@ public class FocusSessionService {
         String classification;
 
         if (totalMinutes < 60) {
-            classification = "FOCO_BAIXO";
+            classification = "FOCO BAIXO";
         } else if (totalMinutes <= 120) {
-            classification = "FOCO_MEDIO";
+            classification = "FOCO MÉDIO";
         } else {
-            classification = "FOCO_ALTO";
+            classification = "FOCO ALTO";
         }
 
         return new TodayStatsResponse(
